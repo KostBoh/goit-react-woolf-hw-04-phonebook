@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 import { nanoid } from 'nanoid';
@@ -19,34 +19,31 @@ const App = () => {
   });
   const [filter, setFilter] = useState('');
 
-  const createNewContact = useCallback(
-    (name, number) => {
-      const existingContact = contacts.find(
-        contact => contact.name.toLowerCase() === name.toLowerCase()
-      );
-      if (existingContact) {
-        alert(`${name} is already in contacts.`);
-        return;
-      }
-      const newContact = {
-        id: nanoid(),
-        name,
-        number,
-      };
-      setContacts(prevContacts => [newContact, ...prevContacts]);
-    },
-    [contacts]
-  );
+  const createNewContact = (name, number) => {
+    const existingContact = contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    if (existingContact) {
+      alert(`${name} is already in contacts.`);
+      return;
+    }
+    const newContact = {
+      id: nanoid(),
+      name,
+      number,
+    };
+    setContacts(prevContacts => [newContact, ...prevContacts]);
+  };
 
-  const handleFilterChange = useCallback(e => {
+  const handleFilterChange = e => {
     setFilter(e.target.value);
-  }, []);
+  };
 
-  const deleteContact = useCallback(id => {
+  const deleteContact = id => {
     setContacts(prevContacts =>
       prevContacts.filter(contact => contact.id !== id)
     );
-  }, []);
+  };
 
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
